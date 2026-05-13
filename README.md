@@ -4,11 +4,11 @@ Sistema de consulta e análise de desempenho comercial da **Rede Comercial Auror
 
 ## Integrantes
 
-<!-- Adicione os nomes dos integrantes do grupo abaixo -->
-- Integrante 1
-- Integrante 2
-- Integrante 3
-- Integrante 4
+- Diogo Lucas Ferreira Vasconcelos
+- Kamilly 
+- Stenio
+- Alexandre
+- Pablo
 
 ## Descrição do Projeto
 
