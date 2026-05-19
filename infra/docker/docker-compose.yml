@@ -13,5 +13,23 @@ services:
       - ../../db/init/cria_banco.sql:/docker-entrypoint-initdb.d/cria_banco.sql
     restart: unless-stopped
 
+  api:
+    build:
+      context: ../../app
+    container_name: aurora-api
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: aurora_db
+      DB_USER: aurora_user
+      DB_PASSWORD: aurora_pass
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../../app:/app
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
 volumes:
   aurora_data:

@@ -1,92 +1,108 @@
 # Rede Comercial Aurora
 
-Sistema de consulta e análise de desempenho comercial da **Rede Comercial Aurora**, desenvolvido como projeto da disciplina de Projeto de Sistemas.
+Sistema de consulta e analise de desempenho comercial da **Rede Comercial Aurora**, desenvolvido como projeto da disciplina de Projeto de Sistemas.
 
 ## Integrantes
 
 - Diogo Lucas Ferreira Vasconcelos
-- Kamilly 
+- Kamilly
 - Stenio
 - Alexandre
 - Pablo
 
-## Descrição do Projeto
+## Descricao do Projeto
 
-A Rede Comercial Aurora precisa de um sistema para consultar e analisar seu desempenho comercial. Este projeto implementa a infraestrutura de dados necessária para calcular indicadores como faturamento, receita líquida, margem bruta e ticket médio, permitindo análises por filial, categoria, produto e período.
+A Rede Comercial Aurora precisa de um sistema para consultar e analisar seu desempenho comercial. Este projeto implementa a infraestrutura de dados e uma API inicial para calcular indicadores como faturamento, receita liquida, margem bruta e ticket medio, com analises por filial, categoria, produto e periodo.
 
-### Perguntas de Negócio
+## Perguntas de Negocio
 
-O sistema responde às seguintes perguntas:
-
-1. Qual foi o faturamento total por mês?
-2. Quais filiais tiveram maior receita líquida no período analisado?
-3. Quais categorias de produto geraram maior receita líquida?
+1. Qual foi o faturamento total por mes?
+2. Quais filiais tiveram maior receita liquida no periodo analisado?
+3. Quais categorias de produto geraram maior receita liquida?
 4. Quais produtos tiveram maior quantidade vendida?
-5. Como a margem bruta varia por mês, filial e categoria?
-
-### Indicadores
-
-- Faturamento bruto
-- Desconto total
-- Receita líquida
-- Custo total
-- Margem bruta
-- Margem bruta percentual
-- Quantidade vendida
-- Ticket médio
-
-## Estrutura do Repositório
-
-```
-aurora/
-├── db/
-│   ├── init/
-│   │   └── cria_banco.sql          # Script SQL de criação e dados de teste
-│   └── docs/
-│       └── modelo_banco.md         # Modelo técnico do banco de dados
-├── infra/
-│   └── docker/
-│       ├── docker-compose.yml      # Container PostgreSQL
-│       └── README.md               # Instruções do Docker
-├── docs/
-│   ├── requisitos_tecnicos.md      # Requisitos e especificações técnicas
-│   ├── entregas.md                 # Controle de entregas por semana
-│   └── REQUISITO_01_SEMANA_01_*.md # Requisitos do professor
-└── README.md                       # Este arquivo
-```
+5. Como a margem bruta varia por mes, filial e categoria?
 
 ## Tecnologias
 
-- **PostgreSQL 16** — Banco de dados relacional
-- **Docker** — Containerização do ambiente
-- **SQL** — Consultas e manipulação de dados
+- PostgreSQL 16
+- Docker Compose
+- Python 3.12
+- Flask
+- psycopg2
+- SQL com materialized views
+
+## Estrutura do Repositorio
+
+```text
+aurora/
+|-- app/
+|   |-- app.py
+|   |-- config.py
+|   |-- database.py
+|   |-- queries.py
+|   |-- routes.py
+|   |-- services.py
+|   |-- Dockerfile
+|   `-- requirements.txt
+|-- db/
+|   |-- consultas/
+|   |   `-- consultas.sql
+|   |-- docs/
+|   |   `-- modelo_banco.md
+|   `-- init/
+|       `-- cria_banco.sql
+|-- docs/
+|   |-- entregas.md
+|   |-- semana2.md
+|   |-- requisitos_tecnicos.md
+|   |-- REQUISITO_01_SEMANA_01_REPOSITORIO_BANCO_E_INFRAESTRUTURA.md
+|   `-- REQUISITO_02_SEMANA_02_DADOS_CONSULTAS_E_SERVICOS.md
+|-- infra/
+|   `-- docker/
+|       |-- docker-compose.yml
+|       `-- README.md
+`-- README.md
+```
 
 ## Como Executar
 
-### Pré-requisitos
+### Pre-requisitos
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado
+- Docker Desktop instalado
 
-### Passos
+### Subir banco e API
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/diogofvasconcelos/aurora-data-project
-   cd aurora
-   ```
+```bash
+cd infra/docker
+docker compose up -d --build
+```
 
-2. Suba o banco de dados:
-   ```bash
-   cd infra/docker
-   docker compose up -d
-   ```
+Servicos:
 
-3. Acesse o banco:
-   ```bash
-   docker exec -it aurora-postgres psql -U aurora_user -d aurora_db
-   ```
+- PostgreSQL: `localhost:5434`
+- API Flask: `http://localhost:5000`
 
-4. Execute consultas de validação (já inclusas no script de inicialização).
+### Acessar o banco
+
+```bash
+docker exec -it aurora-postgres psql -U aurora_user -d aurora_db
+```
+
+### Testar a API
+
+```bash
+curl "http://localhost:5000/api/faturamento-mensal"
+curl "http://localhost:5000/api/receita-filial?data_inicio=2024-01-01&data_fim=2024-06-30"
+curl "http://localhost:5000/api/produtos-mais-vendidos?filial_id=1&categoria_id=4"
+```
+
+Filtros disponiveis nos endpoints:
+
+- `data_inicio` no formato `YYYY-MM-DD`
+- `data_fim` no formato `YYYY-MM-DD`
+- `filial_id`
+- `produto_id`
+- `categoria_id`
 
 ### Parar o ambiente
 
@@ -95,9 +111,18 @@ cd infra/docker
 docker compose down
 ```
 
-## Documentação
+Para recriar o banco do zero e executar novamente o script inicial:
 
+```bash
+cd infra/docker
+docker compose down -v
+docker compose up -d --build
+```
+
+## Documentacao
+
+- [Semana 2](docs/semana2.md)
 - [Modelo do Banco de Dados](db/docs/modelo_banco.md)
-- [Requisitos Técnicos](docs/requisitos_tecnicos.md)
+- [Requisitos Tecnicos](docs/requisitos_tecnicos.md)
 - [Controle de Entregas](docs/entregas.md)
-- [Instruções Docker](infra/docker/README.md)
+- [Instrucoes Docker](infra/docker/README.md)

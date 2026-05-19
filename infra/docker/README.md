@@ -1,62 +1,64 @@
-# Infraestrutura — Docker PostgreSQL
+# Infraestrutura - Docker
 
-## Pré-requisitos
+## Pre-requisitos
 
-- [Docker](https://www.docker.com/) instalado
-- [Docker Compose](https://docs.docker.com/compose/) (incluído no Docker Desktop)
+- Docker Desktop instalado
 
-## Configuração do Container
+## Servicos
 
-| Propriedade | Valor |
-|-------------|-------|
-| Container | `aurora-postgres` |
-| Imagem | `postgres:16` |
-| Banco de dados | `aurora_db` |
-| Usuário | `aurora_user` |
-| Senha | `aurora_pass` |
-| Porta | `5432` |
+| Servico | Container | Porta local | Uso |
+|---------|-----------|-------------|-----|
+| PostgreSQL | `aurora-postgres` | `5434` | Banco `aurora_db` |
+| API Flask | `aurora-api` | `5000` | Endpoints REST |
 
-## Como executar
+Credenciais do banco:
 
-### 1. Subir o container
+- Database: `aurora_db`
+- Usuario: `aurora_user`
+- Senha: `aurora_pass`
+
+## Como Executar
 
 ```bash
 cd infra/docker
-docker compose up -d
+docker compose up -d --build
 ```
 
-Na primeira execução, o script `db/init/cria_banco.sql` será executado automaticamente, criando as tabelas e inserindo os dados de teste.
+Na primeira execucao, o script `db/init/cria_banco.sql` cria as tabelas, insere os dados de teste e cria as materialized views.
 
-### 2. Verificar se o container está rodando
-
-```bash
-docker ps
-```
-
-### 3. Acessar o banco via psql
+## Acessar o Banco
 
 ```bash
 docker exec -it aurora-postgres psql -U aurora_user -d aurora_db
 ```
 
-### 4. Parar o container
+## Testar a API
+
+```bash
+curl "http://localhost:5000/api/health"
+curl "http://localhost:5000/api/faturamento-mensal"
+```
+
+## Parar
 
 ```bash
 docker compose stop
 ```
 
-### 5. Remover o container e dados
+## Resetar Banco e Volumes
 
 ```bash
 docker compose down -v
+docker compose up -d --build
 ```
 
-> **Nota:** O flag `-v` remove o volume de dados. Use somente se quiser resetar o banco completamente.
+Use `down -v` somente quando quiser recriar o banco completamente.
 
 ## Troubleshooting
 
-| Problema | Solução |
+| Problema | Solucao |
 |----------|---------|
-| Porta 5432 em uso | Pare outro serviço PostgreSQL local ou altere a porta no `docker-compose.yml` |
-| Script SQL não executou | Remova o volume com `docker compose down -v` e suba novamente |
-| Permissão negada | Execute o Docker com permissões de administrador |
+| Porta `5434` em uso | Altere a porta local do PostgreSQL no `docker-compose.yml` |
+| Porta `5000` em uso | Altere a porta local da API no `docker-compose.yml` |
+| Script SQL nao executou | Rode `docker compose down -v` e suba novamente |
+| API nao conecta ao banco | Verifique se `aurora-postgres` esta em execucao |
