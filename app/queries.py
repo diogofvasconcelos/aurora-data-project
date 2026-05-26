@@ -119,6 +119,41 @@ def margem_bruta(filters):
             END AS margem_bruta_pct
         FROM v_indicadores_venda
         {where_sql}
-        GROUP BY ano, mes, filial, categoria
+        GROUP BY ano, mes, filial_id, filial, categoria_id, categoria
         ORDER BY ano, mes, filial, categoria
+    """, params
+
+
+def get_filiais(filters=None):
+    return "SELECT filial_id AS id, nome FROM filiais ORDER BY nome", {}
+
+
+def get_categorias(filters=None):
+    return "SELECT categoria_id AS id, nome FROM categorias ORDER BY nome", {}
+
+
+def get_produtos(filters=None):
+    return "SELECT produto_id AS id, nome, categoria_id FROM produtos ORDER BY nome", {}
+
+
+def indicadores_gerais(filters):
+    where_sql, params = build_filters(filters)
+    return f"""
+        SELECT
+            COALESCE(SUM(faturamento_bruto_item), 0)::NUMERIC(12,2) AS faturamento_bruto,
+            COALESCE(SUM(desconto_total_item), 0)::NUMERIC(12,2) AS desconto_total,
+            COALESCE(SUM(receita_liquida_item), 0)::NUMERIC(12,2) AS receita_liquida,
+            COALESCE(SUM(custo_total_item), 0)::NUMERIC(12,2) AS custo_total,
+            (COALESCE(SUM(receita_liquida_item), 0) - COALESCE(SUM(custo_total_item), 0))::NUMERIC(12,2) AS margem_bruta,
+            CASE
+                WHEN COALESCE(SUM(receita_liquida_item), 0) = 0 THEN 0
+                ELSE ROUND((COALESCE(SUM(receita_liquida_item), 0) - COALESCE(SUM(custo_total_item), 0)) / COALESCE(SUM(receita_liquida_item), 0) * 100, 2)
+            END AS margem_bruta_pct,
+            COALESCE(SUM(quantidade), 0)::INTEGER AS quantidade_vendida,
+            CASE
+                WHEN COUNT(DISTINCT venda_id) = 0 THEN 0
+                ELSE ROUND(COALESCE(SUM(receita_liquida_item), 0) / COUNT(DISTINCT venda_id), 2)
+            END AS ticket_medio
+        FROM v_indicadores_venda
+        {where_sql}
     """, params

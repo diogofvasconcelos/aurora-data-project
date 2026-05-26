@@ -10,6 +10,10 @@ QUERY_BUILDERS = {
     "receita_categoria": queries.receita_categoria,
     "produtos_mais_vendidos": queries.produtos_mais_vendidos,
     "margem_bruta": queries.margem_bruta,
+    "filiais": queries.get_filiais,
+    "categorias": queries.get_categorias,
+    "produtos": queries.get_produtos,
+    "indicadores_gerais": queries.indicadores_gerais,
 }
 
 

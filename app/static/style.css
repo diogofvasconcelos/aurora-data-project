@@ -1,0 +1,163 @@
+/* ============================================
+   AURORA — Professional Dashboard Stylesheet
+   Clean Corporate Dark Theme
+   ============================================ */
+
+/* ---- Tailwind CSS v4 Custom Theme ---- */
+@theme {
+  --color-primary: #3b82f6;
+  --color-primary-light: #60a5fa;
+  --color-bg-main: #111827;
+  --color-bg-card: #1f2937;
+  --color-bg-sidebar: #111827;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+}
+
+/* ---- Scrollbar ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 114, 128, 0.3) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(107, 114, 128, 0.3);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.5);
+}
+
+/* ---- KPI Cards ---- */
+.kpi-card {
+  transition: all 0.2s ease;
+  background: #1f2937;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ---- Chart Panels ---- */
+.chart-panel {
+  background: #1f2937;
+  transition: box-shadow 0.2s ease;
+}
+
+.chart-panel:hover {
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.25);
+}
+
+/* ---- Error Overlay ---- */
+.error-box {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ---- Form Elements ---- */
+select, input[type="date"] {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+select:focus, input[type="date"]:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ---- Primary Button ---- */
+.btn-primary {
+  transition: all 0.15s ease;
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ---- Canvas ---- */
+canvas {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* ---- Table ---- */
+table tbody tr {
+  transition: background 0.15s ease;
+}
+table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.04);
+}
+
+/* ---- Rank Badge ---- */
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.rank-badge.top-1 {
+  background: rgba(234, 179, 8, 0.12);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.2);
+}
+.rank-badge.top-2 {
+  background: rgba(156, 163, 175, 0.1);
+  color: #9ca3af;
+  border: 1px solid rgba(156, 163, 175, 0.15);
+}
+.rank-badge.top-3 {
+  background: rgba(180, 120, 60, 0.1);
+  color: #c97e3a;
+  border: 1px solid rgba(180, 120, 60, 0.15);
+}
+.rank-badge.default {
+  background: rgba(107, 114, 128, 0.06);
+  color: #6b7280;
+  border: 1px solid rgba(107, 114, 128, 0.1);
+}
+
+/* ---- Fade-in animation ---- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.kpi-card { animation: fadeIn 0.3s ease-out both; }
+.kpi-card:nth-child(1) { animation-delay: 0.02s; }
+.kpi-card:nth-child(2) { animation-delay: 0.04s; }
+.kpi-card:nth-child(3) { animation-delay: 0.06s; }
+.kpi-card:nth-child(4) { animation-delay: 0.08s; }
+.kpi-card:nth-child(5) { animation-delay: 0.10s; }
+.kpi-card:nth-child(6) { animation-delay: 0.12s; }
+.kpi-card:nth-child(7) { animation-delay: 0.14s; }
+.kpi-card:nth-child(8) { animation-delay: 0.16s; }
+
+.chart-panel { animation: fadeIn 0.4s ease-out both; }
+.chart-panel:nth-child(1) { animation-delay: 0.1s; }
+.chart-panel:nth-child(2) { animation-delay: 0.15s; }
+.chart-panel:nth-child(3) { animation-delay: 0.2s; }
+.chart-panel:nth-child(4) { animation-delay: 0.25s; }
+
+/* ---- Status dot ---- */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.status-dot {
+  animation: blink 2s ease-in-out infinite;
+}

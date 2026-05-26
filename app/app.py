@@ -14,16 +14,20 @@ def create_app():
 
     @app.get("/")
     def index():
-        return jsonify({
-            "nome": "Rede Comercial Aurora API",
-            "endpoints": [
-                "/api/faturamento-mensal",
-                "/api/receita-filial",
-                "/api/receita-categoria",
-                "/api/produtos-mais-vendidos",
-                "/api/margem-bruta",
-            ],
-        })
+        return app.send_static_file("index.html")
+
+    # Global error handler — ensures Flask NEVER returns a blank page
+    @app.errorhandler(500)
+    def handle_500(error):
+        return jsonify({"erro": "Erro interno do servidor"}), 500
+
+    @app.errorhandler(503)
+    def handle_503(error):
+        return jsonify({"erro": "Banco de dados indisponível"}), 503
+
+    @app.errorhandler(Exception)
+    def handle_exception(error):
+        return jsonify({"erro": f"Erro inesperado: {error}"}), 500
 
     return app
 
